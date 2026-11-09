@@ -1,0 +1,58 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>無料診断｜医療法人まるっとDX</title>
+<style>
+:root{--n:#17364d;--t:#147d7d;--bg:#f4f8f9;--line:#dce6ea}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#263946;font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic",Meiryo,sans-serif;line-height:1.65}header{background:linear-gradient(120deg,#15344d,#147879);color:white;padding:42px 20px}.wrap{max-width:850px;margin:auto;padding:24px 16px}h1{font-size:clamp(28px,5vw,40px);line-height:1.3;margin:8px 0}h2{color:var(--n);font-size:21px}.card{background:white;border:1px solid var(--line);border-radius:15px;padding:20px;margin-bottom:16px}.muted{font-size:13px;color:#687b87}.q{padding:15px 0;border-top:1px solid #edf1f3}.q:first-child{border:0}.choices{display:flex;gap:8px;flex-wrap:wrap}.choices label{border:1px solid #cbd8de;border-radius:9px;padding:7px 11px;font-size:13px;cursor:pointer}.choices input{accent-color:var(--t)}button{border:0;border-radius:9px;padding:12px 17px;font-weight:bold;cursor:pointer;background:var(--t);color:white}button:disabled{opacity:.4}.secondary{background:#eaf0f2;color:var(--n)}.bar{height:8px;background:#e5edef;border-radius:8px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:var(--t)}.result{display:none;border-top:5px solid var(--t)}.result.show{display:block}.score{font-size:42px;font-weight:800;color:var(--t)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}.tile{background:#f1f7f7;border-radius:10px;padding:13px}.tag{color:var(--t);font-weight:bold;font-size:12px}select{padding:10px;border:1px solid #cbd8de;border-radius:8px;width:100%}@media print{header,.no-print{display:none}.wrap{padding:0}.card{box-shadow:none}}
+</style></head><body>
+<header><div class="wrap"><b>MEDICAL BACK OFFICE & DX PARTNER</b><h1>医療法人の運営課題を、<br>約5分でセルフチェック。</h1><p>総務・人事・経理・院内IT・業務効率化・医療事務周辺の現状を整理し、改善の優先テーマを見つけましょう。</p></div></header>
+<main class="wrap">
+<section class="card"><b style="color:#147d7d">無料・約5分・登録不要</b><p>各項目について、現在の状況に最も近いものを選んでください。</p><p class="muted">患者情報、個人情報、システムのID・パスワードなどは入力しないでください。</p><div class="bar"><span id="bar"></span></div><small id="progress" class="muted">回答済み 0 / 14 項目</small></section>
+<section class="card"><h2>法人情報（任意）</h2><div class="grid">
+<div><label>法人・施設の形態<select id="type"><option value="">選択してください</option><option>病院を運営</option><option>診療所・クリニックを運営</option><option>複数施設を運営</option><option>その他・回答しない</option></select></label></div>
+<div><label>運営施設数<select id="count"><option value="">選択してください</option><option>1施設</option><option>2〜3施設</option><option>4〜9施設</option><option>10施設以上</option></select></label></div>
+<div><label>回答者の立場<select id="role"><option value="">選択してください</option><option>理事長・役員</option><option>事務長・管理職</option><option>総務・人事</option><option>経理・経営管理</option><option>IT・DX担当</option><option>その他・回答しない</option></select></label></div>
+</div></section>
+<form id="form"><section class="card"><h2>現状チェック（全14項目）</h2><div id="qs"></div><p class="muted">すべて回答すると診断結果を表示できます。</p><button id="go" type="button" disabled>診断結果を見る</button> <button class="secondary" type="reset">リセット</button></section></form>
+<section class="card result" id="result" aria-live="polite"><span class="tag">診断結果</span><h2>貴法人のバックオフィス・DX診断</h2><div><span class="score" id="score">--</span> / 100点</div><h3 id="level"></h3><p id="summary"></p><h3>領域別スコア・優先テーマ</h3><div class="grid" id="areas"></div><h3>次の一歩</h3><ul id="steps"></ul>
+<div class="tile"><h3>医療法人まるっとDXのサービス</h3><p><b>基本プラン：月額45万円（税別）</b><br>所定条件を満たす人材派遣・紹介契約が有効な期間、基本プラン相当の標準サポートを無料提供。</p><p><b>プレミアム：月額60万円（税別）</b><br>複数施設の標準化、法人横断のDX推進、導入プロジェクト支援など。人材契約特典の対象外です。</p><p class="muted">診断結果で契約プランが自動決定するものではありません。対象施設・対応時間・業務範囲は個別契約で確定します。</p></div>
+<button id="copy" type="button">診断結果をコピー</button> <button class="secondary" type="button" onclick="print()">印刷／PDF保存</button> <button class="secondary" id="again" type="button">もう一度診断</button>
+<p class="muted">この初版は回答をブラウザ内で集計するだけで、サーバーへ送信・保存しません。問い合わせ獲得や回答の自動受信には、送信先・プライバシーポリシー等の整備とフォーム連携が別途必要です。</p></section>
+<p class="muted">医療法人まるっとDX｜無料簡易セルフチェック</p></main>
+<script>
+const data=[
+["総務・人事","契約書・規程・備品・購買などの管理方法は、法人内で整理・統一されていますか？"],
+["総務・人事","入退職・勤怠・採用事務の手順やデータは、担当者が変わっても運用できますか？"],
+["総務・人事","総務・人事の業務が特定の職員に集中せず、手順書や引継ぎ資料が整っていますか？"],
+["経理・経営管理","請求書・経費・支払関連の処理で、手入力や二重入力を減らせていますか？"],
+["経理・経営管理","施設別の売上・費用・人員など、経営状況を定期的に把握できていますか？"],
+["院内IT・システム","PC・スマートフォン・プリンターなどの台帳と管理責任者が明確ですか？"],
+["院内IT・システム","入退職・異動時のアカウント発行・停止・権限変更を漏れなく行えていますか？"],
+["院内IT・システム","電子カルテ・医事会計・部門システムの問い合わせ窓口やベンダー連絡先が整理されていますか？"],
+["院内IT・システム","システム契約・保守期限・ライセンス・費用を一覧で把握できていますか？"],
+["業務改善・DX","紙・Excel・手入力が多く、時間がかかる業務を把握し、改善に着手できていますか？"],
+["業務改善・DX","法人全体のDX計画や優先順位、推進責任者が明確になっていますか？"],
+["医療事務周辺","医事部門の事務フロー・帳票・データ集計の手順が整理・改善されていますか？"],
+["人材","総務・経理・医療事務・ITなど、不足する人材やスキルを計画的に補えていますか？"],
+["情報管理","患者情報・個人情報へのアクセス権限や委託先の管理ルールが整備されていますか？"]
+];
+const q=document.getElementById('qs');
+data.forEach((x,i)=>{if(i===0||data[i-1][0]!==x[0]){let h=document.createElement('h3');h.textContent=x[0];q.appendChild(h)}
+let d=document.createElement('div');d.className='q';d.innerHTML=`<b>${i+1}. ${x[1]}</b><div class="choices"><label><input type="radio" name="q${i}" value="2"> できている</label><label><input type="radio" name="q${i}" value="1"> 一部できている</label><label><input type="radio" name="q${i}" value="0"> できていない・不明</label></div>`;q.appendChild(d)});
+function update(){let a=data.filter((_,i)=>document.querySelector(`[name=q${i}]:checked`)).length;document.getElementById('progress').textContent=`回答済み ${a} / 14 項目`;document.getElementById('bar').style.width=(a/14*100)+'%';document.getElementById('go').disabled=a!==14}
+document.querySelectorAll('input[type=radio]').forEach(x=>x.addEventListener('change',update));
+let report='';
+document.getElementById('go').onclick=()=>{
+let v=data.map((_,i)=>+document.querySelector(`[name=q${i}]:checked`).value),score=Math.round(v.reduce((a,b)=>a+b,0)/28*100);
+let level=score>=80?'運用基盤は比較的整っています':score>=55?'改善の余地が複数あります':score>=30?'業務の整理・標準化をおすすめします':'まずは現状把握と運用基盤づくりが重要です';
+document.getElementById('score').textContent=score;document.getElementById('level').textContent=level;
+document.getElementById('summary').textContent=score>=80?'次は施設間の標準化、データ活用、改善効果の測定を進める段階です。':score>=55?'手順・情報・システム管理のばらつきを確認し、優先領域を絞った改善が有効です。':score>=30?'担当者依存や手作業、情報分散が負担につながっている可能性があります。業務棚卸しから始めましょう。':'管理業務やIT運用の仕組みを整理し、小さな範囲から改善することをおすすめします。';
+let groups=[...new Set(data.map(x=>x[0]))].map(g=>({g,ids:data.map((x,i)=>x[0]===g?i:-1).filter(i=>i>=0)})).map(o=>({...o,s:Math.round(o.ids.reduce((a,i)=>a+v[i],0)/(o.ids.length*2)*100)})).sort((a,b)=>a.s-b.s);
+document.getElementById('areas').innerHTML=groups.map((x,i)=>`<div class="tile"><span class="tag">優先 ${i+1}</span><h3>${x.g}</h3><b>${x.s}/100点</b><p class="muted">${x.s<50?'早めの現状整理・改善を':x.s<75?'手順や管理方法の見直しを':'運用定着・横展開を'}検討</p></div>`).join('');
+let steps=[`${groups[0].g}の業務・担当者・使用ツールを一覧化する`,`次に優先度の高い${groups[1].g}の課題と改善順を整理する`,'法人本部と各施設で共通化できる手順・台帳・窓口を確認する'];
+document.getElementById('steps').innerHTML=steps.map(x=>`<li>${x}</li>`).join('');
+report=`医療法人まるっとDX｜無料簡易診断結果\n総合スコア：${score}/100点\n判定：${level}\n法人形態：${document.getElementById('type').value||'未回答'}\n運営施設数：${document.getElementById('count').value||'未回答'}\n回答者：${document.getElementById('role').value||'未回答'}\n\n領域別スコア：\n${groups.map(x=>x.g+'：'+x.s+'/100点').join('\n')}\n\n※簡易セルフチェックであり、専門的な監査・評価ではありません。`;
+document.getElementById('result').classList.add('show');document.getElementById('result').scrollIntoView({behavior:'smooth'});
+};
+document.getElementById('copy').onclick=async()=>{try{await navigator.clipboard.writeText(report)}catch(e){let t=document.createElement('textarea');t.value=report;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}document.getElementById('copy').textContent='コピーしました'};
+document.getElementById('again').onclick=()=>{document.getElementById('form').reset();document.getElementById('result').classList.remove('show');update();scrollTo({top:0,behavior:'smooth'})};
+document.getElementById('form').onreset=()=>setTimeout(()=>{document.getElementById('result').classList.remove('show');update()},0);
+update();
+</script></body></html>
